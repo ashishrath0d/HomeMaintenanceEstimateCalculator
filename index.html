@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cost Estimate Calculator</title>
+    <style>
+      /* General styling */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 350px;
+      }
+
+      h2 {
+        color: #004085;
+        font-size: 1.4em;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* Section styling */
+      .section {
+        margin-bottom: 15px;
+      }
+
+      label {
+        font-size: 0.9em;
+        color: #555;
+      }
+
+      .note,
+      .cost-estimates {
+        background-color: #3399ff;
+        color: white;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 10px;
+        font-size: 0.85em;
+      }
+
+      .note p {
+        margin: 0;
+      }
+
+      /* Input group styling */
+      .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .input-group label {
+        width: 80px;
+        font-weight: bold;
+      }
+
+      .input-group button {
+        width: 28px;
+        height: 28px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+
+      .input-group button:hover {
+        background-color: #0056b3;
+      }
+
+      .input-group input[type="number"] {
+        width: 50px;
+        text-align: center;
+        margin: 0 5px;
+        padding: 5px;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      /* Cost estimates styling */
+      .cost-estimates h3 {
+        margin: 0;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+      }
+
+      .costs {
+        margin-top: 10px;
+        font-size: 0.9em;
+      }
+
+      .costs p {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+      }
+
+      hr {
+        border: 0;
+        height: 1px;
+        background-color: #ddd;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Cost Estimate Calculator</h2>
+
+      <div class="section">
+        <label>Property Size (Sq. Feet)</label><br />
+        <label
+          ><input
+            type="radio"
+            name="propertySize"
+            value="1700"
+            onclick="calculate()"
+          />
+          < 1700</label
+        ><br />
+        <label
+          ><input
+            type="radio"
+            name="propertySize"
+            value="1700-2499"
+            onclick="calculate()"
+            checked
+          />
+          1700 - 2499</label
+        ><br />
+        <label
+          ><input
+            type="radio"
+            name="propertySize"
+            value="2500-2999"
+            onclick="calculate()"
+          />
+          2500 - 2999</label
+        ><br />
+        <label
+          ><input
+            type="radio"
+            name="propertySize"
+            value="3000-3500"
+            onclick="calculate()"
+          />
+          3000 - 3500</label
+        ><br />
+      </div>
+
+      <div class="note">
+        <p>
+          This calculator can be used to provide a cost estimate. Actual costs
+          may vary depending on your home.
+        </p>
+        <p>
+          For properties greater than 5000 sq. feet please contact us directly
+          for an estimate.
+        </p>
+      </div>
+
+      <div class="section">
+        <label>Window Cleaning</label><br />
+        <label
+          ><input type="checkbox" id="outsideWindows" onclick="calculate()" />
+          Outside Windows</label
+        ><br />
+        <label
+          ><input type="checkbox" id="insideWindows" onclick="calculate()" />
+          Inside Windows</label
+        ><br />
+      </div>
+
+      <div class="section">
+        <label>Skylights</label>
+        <div class="input-group">
+          <label>Exterior</label>
+          <button onclick="updateCount('exterior', -1)">-</button>
+          <input
+            type="number"
+            id="exterior"
+            value="0"
+            min="0"
+            onchange="calculate()"
+          />
+          <button onclick="updateCount('exterior', 1)">+</button>
+        </div>
+        <div class="input-group">
+          <label>Interior</label>
+          <button onclick="updateCount('interior', -1)">-</button>
+          <input
+            type="number"
+            id="interior"
+            value="0"
+            min="0"
+            onchange="calculate()"
+          />
+          <button onclick="updateCount('interior', 1)">+</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <label>Decking Glass</label>
+        <div class="input-group">
+          <label>Glass Panes</label>
+          <button onclick="updateCount('glassPanes', -1)">-</button>
+          <input
+            type="number"
+            id="glassPanes"
+            value="0"
+            min="0"
+            onchange="calculate()"
+          />
+          <button onclick="updateCount('glassPanes', 1)">+</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <label>Other Cleaning Services</label><br />
+        <label
+          ><input type="checkbox" id="gutterCleaning" onclick="calculate()" />
+          Gutter Debris Removal</label
+        ><br />
+        <label
+          ><input type="checkbox" id="eavesCleaning" onclick="calculate()" />
+          Eaves Trough / Soffits</label
+        ><br />
+        <label
+          ><input type="checkbox" id="vinylSiding" onclick="calculate()" />
+          Vinyl Siding</label
+        ><br />
+        <label
+          ><input type="checkbox" id="drivewayCleaning" onclick="calculate()" />
+          Driveway / Sidewalk Power Wash</label
+        ><br />
+      </div>
+
+      <div class="cost-estimates">
+        <h3>Cost Estimates</h3>
+        <div class="costs">
+          <p>Window Cleaning: <span id="windowCost">$0.00</span></p>
+          <p>Other Cleaning: <span id="otherCost">$0.00</span></p>
+          <hr />
+          <p>Subtotal: <span id="subtotal">$0.00</span></p>
+          <p>HST: <span id="hst">$0.00</span></p>
+          <p>Total: <span id="total">$0.00</span></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const rates = {
+        windowOutside: 50,
+        windowInside: 40,
+        skylightExterior: 30,
+        skylightInterior: 25,
+        glassPane: 20,
+        gutter: 80,
+        eaves: 60,
+        vinyl: 100,
+        driveway: 120,
+        hstRate: 0.13,
+      };
+
+      function updateCount(id, value) {
+        const input = document.getElementById(id);
+        input.value = Math.max(0, parseInt(input.value) + value);
+        calculate();
+      }
+
+      function calculate() {
+        let windowCost = 0;
+        if (document.getElementById("outsideWindows").checked)
+          windowCost += rates.windowOutside;
+        if (document.getElementById("insideWindows").checked)
+          windowCost += rates.windowInside;
+
+        // Add skylight and decking glass cost to window cleaning by default
+        let skylightCost =
+          parseInt(document.getElementById("exterior").value) *
+            rates.skylightExterior +
+          parseInt(document.getElementById("interior").value) *
+            rates.skylightInterior;
+
+        let deckingCost =
+          parseInt(document.getElementById("glassPanes").value) *
+          rates.glassPane;
+
+        windowCost += skylightCost + deckingCost; // Add skylights and decking glass to window cleaning cost
+
+        let otherCost = 0;
+        if (document.getElementById("gutterCleaning").checked)
+          otherCost += rates.gutter;
+        if (document.getElementById("eavesCleaning").checked)
+          otherCost += rates.eaves;
+        if (document.getElementById("vinylSiding").checked)
+          otherCost += rates.vinyl;
+        if (document.getElementById("drivewayCleaning").checked)
+          otherCost += rates.driveway;
+
+        const subtotal = windowCost + otherCost;
+        const hst = subtotal * rates.hstRate;
+        const total = subtotal + hst;
+
+        document.getElementById(
+          "windowCost"
+        ).textContent = `$${windowCost.toFixed(2)}`;
+        document.getElementById(
+          "otherCost"
+        ).textContent = `$${otherCost.toFixed(2)}`;
+        document.getElementById("subtotal").textContent = `$${subtotal.toFixed(
+          2
+        )}`;
+        document.getElementById("hst").textContent = `$${hst.toFixed(2)}`;
+        document.getElementById("total").textContent = `$${total.toFixed(2)}`;
+      }
+
+      // Initial calculation
+      calculate();
+    </script>
+  </body>
+</html>
